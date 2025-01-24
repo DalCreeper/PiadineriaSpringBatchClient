@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/batch")
+@RequestMapping("/PiadineriaAdvanciaClientBatch/batch")
 public class BatchController {
 
     @Autowired
@@ -20,7 +20,12 @@ public class BatchController {
 
     @Autowired
     private Job job;
-
+    
+    @GetMapping("/startJob")
+    public String getStartJobPage() {
+        return "startJob";
+    }
+    
     @GetMapping("/start")
     public String startBatch(Model model) {
         try {
@@ -37,4 +42,4 @@ public class BatchController {
     }
 }
 
-//http://localhost:8080/PiadineriaAdvanciaClientBatch/start
+// http://localhost:8080/PiadineriaAdvanciaClientBatch/start

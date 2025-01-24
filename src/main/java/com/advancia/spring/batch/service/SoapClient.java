@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.advancia.spring.batch.model.Operation;
-import com.advancia.spring.soapclient.Dough;
-import com.advancia.spring.soapclient.MeatBase;
-import com.advancia.spring.soapclient.OptionalElements;
-import com.advancia.spring.soapclient.Sauces;
+import com.advancia.spring.batch.soapclient.Dough;
+import com.advancia.spring.batch.soapclient.MeatBase;
+import com.advancia.spring.batch.soapclient.OptionalElements;
+import com.advancia.spring.batch.soapclient.Sauces;
 
 @Component
 public class SoapClient {
@@ -36,15 +36,15 @@ public class SoapClient {
     private void handleDoughOperation(Operation operation) throws Exception {
         Dough dough = new Dough();
         dough.setType(operation.getElementName());
-        switch (operation.getType()) {
+        switch(operation.getType()) {
             case "ADD":
             	piadinaCS.addDough(dough);
                 break;
             case "UPDATE":
-            	piadinaCS.updateDough(operation.getElementId(), dough);
+            	piadinaCS.updateDoughByType(operation.getElementName(), dough);
                 break;
             case "REMOVE":
-            	piadinaCS.deleteDough(operation.getElementId());
+            	piadinaCS.deleteDoughByType(operation.getElementName());
                 break;
             default:
                 throw new IllegalArgumentException("Invalid operation type: " + operation.getType());
@@ -59,10 +59,10 @@ public class SoapClient {
             	piadinaCS.addMeatBase(meatBase);
                 break;
             case "UPDATE":
-            	piadinaCS.updateMeatBase(operation.getElementId(), meatBase);
+            	piadinaCS.updateMeatBaseByType(operation.getElementName(), meatBase);
                 break;
             case "REMOVE":
-            	piadinaCS.deleteMeatBase(operation.getElementId());
+            	piadinaCS.deleteMeatBaseByType(operation.getElementName());
                 break;
             default:
                 throw new IllegalArgumentException("Invalid operation type: " + operation.getType());
@@ -77,10 +77,10 @@ public class SoapClient {
             	piadinaCS.addSauces(sauces);
                 break;
             case "UPDATE":
-            	piadinaCS.updateSauces(operation.getElementId(), sauces);
+            	piadinaCS.updateSaucesByType(operation.getElementName(), sauces);
                 break;
             case "REMOVE":
-            	piadinaCS.deleteSauces(operation.getElementId());
+            	piadinaCS.deleteSaucesByType(operation.getElementName());
                 break;
             default:
                 throw new IllegalArgumentException("Invalid operation type: " + operation.getType());
@@ -95,10 +95,10 @@ public class SoapClient {
             	piadinaCS.addOptionalElements(optionalElements);
                 break;
             case "UPDATE":
-            	piadinaCS.updateOptionalElements(operation.getElementId(), optionalElement);
+            	piadinaCS.updateOptionalElementsByType(operation.getElementName(), optionalElements);
                 break;
             case "REMOVE":
-            	piadinaCS.deleteOptionalElements(operation.getElementId());
+            	piadinaCS.deleteOptionalElementsByType(operation.getElementName());
                 break;
             default:
                 throw new IllegalArgumentException("Invalid operation type: " + operation.getType());

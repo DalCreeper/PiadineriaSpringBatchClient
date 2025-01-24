@@ -1,11 +1,11 @@
 package com.advancia.spring.batch.service;
 
-import com.advancia.spring.soapclient.Dough;
-import com.advancia.spring.soapclient.MeatBase;
-import com.advancia.spring.soapclient.OptionalElements;
-import com.advancia.spring.soapclient.PiadinaComponentsApiSoap;
-import com.advancia.spring.soapclient.PiadinaComponentsApiSoapService;
-import com.advancia.spring.soapclient.Sauces;
+import com.advancia.spring.batch.soapclient.Dough;
+import com.advancia.spring.batch.soapclient.MeatBase;
+import com.advancia.spring.batch.soapclient.OptionalElements;
+import com.advancia.spring.batch.soapclient.PiadinaComponentsApiSoap;
+import com.advancia.spring.batch.soapclient.PiadinaComponentsApiSoapService;
+import com.advancia.spring.batch.soapclient.Sauces;
 
 public class PiadinaComponentsServiceImpl implements PiadinaComponentsService {
 
@@ -25,37 +25,37 @@ public class PiadinaComponentsServiceImpl implements PiadinaComponentsService {
             return null;
         }
 	}
-
+	
 	@Override
-	public Dough updateDough(int id, Dough dough) {
-		PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
-        PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
+	public Dough updateDoughByType(String type, Dough dough) {
+	    PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
+	    PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
 
-        System.out.println("SOAP API for updating dough called.");
-        try {
-            Dough updatedDough = port.updateDough(id, dough);
-            System.out.println("Dough updated successfully: " + updatedDough.getType());
-            return updatedDough;
-        } catch(Exception e) {
-            System.out.println("Error while calling the SOAP API to update dough: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
+	    System.out.println("SOAP API for updating dough by type called.");
+	    try {
+	        Dough updatedDough = port.updateDoughByType(type, dough);
+	        System.out.println("Dough updated successfully by type: " + updatedDough.getType());
+	        return updatedDough;
+	    } catch(Exception e) {
+	        System.out.println("Error while calling the SOAP API to update dough by type: " + e.getMessage());
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
 
 	@Override
-	public void deleteDough(int id) {
-		PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
-        PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
+	public void deleteDoughByType(String type) {
+	    PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
+	    PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
 
-        System.out.println("SOAP API for deleting dough called.");
-        try {
-            port.deleteDough(id);
-            System.out.println("Dough with ID " + id + " deleted successfully.");
-        } catch(Exception e) {
-            System.out.println("Error while calling the SOAP API to delete dough: " + e.getMessage());
-            e.printStackTrace();
-        }
+	    System.out.println("SOAP API for deleting dough by type called.");
+	    try {
+	        port.deleteDoughByType(type);
+	        System.out.println("Dough with type " + type + " deleted successfully.");
+	    } catch(Exception e) {
+	        System.out.println("Error while calling the SOAP API to delete dough by type: " + e.getMessage());
+	        e.printStackTrace();
+	    }
 	}
 
 	@Override
@@ -74,37 +74,37 @@ public class PiadinaComponentsServiceImpl implements PiadinaComponentsService {
             return null;
         }
 	}
-
+	
 	@Override
-	public MeatBase updateMeatBase(int id, MeatBase meatBase) {
-		PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
-        PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
+	public MeatBase updateMeatBaseByType(String type, MeatBase meatBase) {
+	    PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
+	    PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
 
-        System.out.println("SOAP API for updating meatBase called.");
-        try {
-        	MeatBase updatedMeatBase = port.updateMeatBase(id, meatBase);
-            System.out.println("MeatBase updated successfully: " + updatedMeatBase.getType());
-            return updatedMeatBase;
-        } catch(Exception e) {
-            System.out.println("Error while calling the SOAP API to update meatBase: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
+	    System.out.println("SOAP API for updating meatBase by type called.");
+	    try {
+	        MeatBase updatedMeatBase = port.updateMeatBaseByType(type, meatBase);
+	        System.out.println("MeatBase updated successfully by type: " + updatedMeatBase.getType());
+	        return updatedMeatBase;
+	    } catch(Exception e) {
+	        System.out.println("Error while calling the SOAP API to update meatBase by type: " + e.getMessage());
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
 
 	@Override
-	public void deleteMeatBase(int id) {
-		PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
-        PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
+	public void deleteMeatBaseByType(String type) {
+	    PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
+	    PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
 
-        System.out.println("SOAP API for deleting meatBase called.");
-        try {
-            port.deleteMeatBase(id);
-            System.out.println("MeatBase with ID " + id + " deleted successfully.");
-        } catch(Exception e) {
-            System.out.println("Error while calling the SOAP API to delete meatBase: " + e.getMessage());
-            e.printStackTrace();
-        }
+	    System.out.println("SOAP API for deleting meatBase by type called.");
+	    try {
+	        port.deleteMeatBaseByType(type);
+	        System.out.println("MeatBase with type " + type + " deleted successfully.");
+	    } catch(Exception e) {
+	        System.out.println("Error while calling the SOAP API to delete meatBase by type: " + e.getMessage());
+	        e.printStackTrace();
+	    }
 	}
 
 	@Override
@@ -123,37 +123,37 @@ public class PiadinaComponentsServiceImpl implements PiadinaComponentsService {
             return null;
         }
 	}
-
+	
 	@Override
-	public Sauces updateSauces(int id, Sauces sauces) {
-		PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
-        PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
+	public Sauces updateSaucesByType(String type, Sauces sauces) {
+	    PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
+	    PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
 
-        System.out.println("SOAP API for updating sauces called.");
-        try {
-        	Sauces updatedSauces = port.updateSauces(id, sauces);
-            System.out.println("Sauces updated successfully: " + updatedSauces.getType());
-            return updatedSauces;
-        } catch(Exception e) {
-            System.out.println("Error while calling the SOAP API to update sauces: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
+	    System.out.println("SOAP API for updating sauces by type called.");
+	    try {
+	        Sauces updatedSauces = port.updateSaucesByType(type, sauces);
+	        System.out.println("Sauces updated successfully by type: " + updatedSauces.getType());
+	        return updatedSauces;
+	    } catch(Exception e) {
+	        System.out.println("Error while calling the SOAP API to update sauces by type: " + e.getMessage());
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
 
 	@Override
-	public void deleteSauces(int id) {
-		PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
-        PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
+	public void deleteSaucesByType(String type) {
+	    PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
+	    PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
 
-        System.out.println("SOAP API for deleting sauces called.");
-        try {
-            port.deleteSauces(id);
-            System.out.println("Sauces with ID " + id + " deleted successfully.");
-        } catch(Exception e) {
-            System.out.println("Error while calling the SOAP API to delete sauces: " + e.getMessage());
-            e.printStackTrace();
-        }
+	    System.out.println("SOAP API for deleting sauces by type called.");
+	    try {
+	        port.deleteSaucesByType(type);
+	        System.out.println("Sauces with type " + type + " deleted successfully.");
+	    } catch(Exception e) {
+	        System.out.println("Error while calling the SOAP API to delete sauces by type: " + e.getMessage());
+	        e.printStackTrace();
+	    }
 	}
 
 	@Override
@@ -172,36 +172,36 @@ public class PiadinaComponentsServiceImpl implements PiadinaComponentsService {
             return null;
         }
 	}
-
+	
 	@Override
-	public OptionalElements updateOptionalElements(int id, OptionalElements optionalElements) {
-		PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
-        PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
+	public OptionalElements updateOptionalElementsByType(String type, OptionalElements optionalElements) {
+	    PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
+	    PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
 
-        System.out.println("SOAP API for updating optionalElements called.");
-        try {
-        	OptionalElements updatedOptionalElements = port.updateOptionalElements(id, optionalElements);
-            System.out.println("OptionalElements updated successfully: " + updatedOptionalElements.getType());
-            return updatedOptionalElements;
-        } catch(Exception e) {
-            System.out.println("Error while calling the SOAP API to update optionalElements: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
+	    System.out.println("SOAP API for updating optionalElements by type called.");
+	    try {
+	        OptionalElements updatedOptionalElements = port.updateOptionalElementsByType(type, optionalElements);
+	        System.out.println("OptionalElements updated successfully by type: " + updatedOptionalElements.getType());
+	        return updatedOptionalElements;
+	    } catch(Exception e) {
+	        System.out.println("Error while calling the SOAP API to update optionalElements by type: " + e.getMessage());
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
 
 	@Override
-	public void deleteOptionalElements(int id) {
-		PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
-        PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
+	public void deleteOptionalElementsByType(String type) {
+	    PiadinaComponentsApiSoapService service = new PiadinaComponentsApiSoapService();
+	    PiadinaComponentsApiSoap port = service.getPiadinaComponentsApiSoapPort();
 
-        System.out.println("SOAP API for deleting optionalElements called.");
-        try {
-            port.deleteOptionalElements(id);
-            System.out.println("OptionalElements with ID " + id + " deleted successfully.");
-        } catch(Exception e) {
-            System.out.println("Error while calling the SOAP API to delete optionalElements: " + e.getMessage());
-            e.printStackTrace();
-        }
+	    System.out.println("SOAP API for deleting optionalElements by type called.");
+	    try {
+	        port.deleteOptionalElementsByType(type);
+	        System.out.println("OptionalElements with type " + type + " deleted successfully.");
+	    } catch(Exception e) {
+	        System.out.println("Error while calling the SOAP API to delete optionalElements by type: " + e.getMessage());
+	        e.printStackTrace();
+	    }
 	}
 }

@@ -52,6 +52,23 @@
 	    <artifactId>spring-webmvc</artifactId>
 	    <version>5.3.30</version>
 	</dependency>
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>javax.servlet-api</artifactId>
+	    <version>4.0.1</version>
+	    <scope>provided</scope>
+	</dependency>
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>jstl</artifactId>
+	    <version>1.2</version>
+	</dependency>
+	<dependency>
+	    <groupId>javax.servlet.jsp</groupId>
+	    <artifactId>javax.servlet.jsp-api</artifactId>
+	    <version>2.3.3</version>
+	    <scope>provided</scope>
+	</dependency>
   </dependencies>
   <build>
     <plugins>
@@ -61,6 +78,7 @@
             <version>2.6</version>
             <executions>
                 <execution>
+                	<phase>generate-sources</phase>
                     <goals>
                         <goal>wsimport</goal>
                     </goals>
@@ -71,6 +89,7 @@
                         <sourceDestDir>${project.build.directory}/generated-sources/wsimport</sourceDestDir>
                         <packageName>com.advancia.spring.batch.soapclient</packageName>
                         <keep>true</keep>
+                        <verbose>true</verbose>
                     </configuration>
                 </execution>
             </executions>
