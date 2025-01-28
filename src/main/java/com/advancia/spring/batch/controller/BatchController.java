@@ -6,13 +6,14 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/PiadineriaAdvanciaClientBatch/batch")
+@RequestMapping("/batch")
 public class BatchController {
 
     @Autowired
@@ -28,12 +29,18 @@ public class BatchController {
     
     @GetMapping("/start")
     public String startBatch(Model model) {
-        try {
+    	try {
+    		String absolutePath = new ClassPathResource("PiadineriaAdvancia_operations.csv").getFile().getAbsolutePath();
             JobParameters parameters = new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())
+                .addString("filePath", absolutePath)
                 .toJobParameters();
+            
             JobExecution execution = jobLauncher.run(job, parameters);
+            
             model.addAttribute("status", execution.getStatus());
+            model.addAttribute("executionId", execution.getId());
+            model.addAttribute("exitStatus", execution.getExitStatus().getExitDescription());
         } catch(Exception e) {
             model.addAttribute("status", "FAILED");
             model.addAttribute("error", e.getMessage());
@@ -42,4 +49,4 @@ public class BatchController {
     }
 }
 
-// http://localhost:8080/PiadineriaAdvanciaClientBatch/start
+// http://localhost:8080/PiadineriaAdvanciaClientBatch/batch/startJob

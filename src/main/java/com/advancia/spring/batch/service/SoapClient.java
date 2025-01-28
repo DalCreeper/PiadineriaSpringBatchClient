@@ -11,11 +11,12 @@ import com.advancia.spring.batch.soapclient.Sauces;
 
 @Component
 public class SoapClient {
+	
     @Autowired
     private PiadinaComponentsService piadinaCS;
 
     public void executeOperation(Operation operation) throws Exception {
-        switch(operation.getElementType()) {
+        switch(operation.getTable()) {
             case "Dough":
                 handleDoughOperation(operation);
                 break;
@@ -29,79 +30,91 @@ public class SoapClient {
                 handleOptionalElementOperation(operation);
                 break;
             default:
-                throw new IllegalArgumentException("Unknown element type: " + operation.getElementType());
+                throw new IllegalArgumentException("Unknown table selection: " + operation.getTable());
         }
     }
         
     private void handleDoughOperation(Operation operation) throws Exception {
         Dough dough = new Dough();
-        dough.setType(operation.getElementName());
-        switch(operation.getType()) {
+        dough.setType(operation.getType());
+        dough.setDescription(operation.getDescription());
+        switch(operation.getOperationtype()) {
             case "ADD":
+            	dough.setPrice(Double.parseDouble(operation.getPrice()));
             	piadinaCS.addDough(dough);
                 break;
             case "UPDATE":
-            	piadinaCS.updateDoughByType(operation.getElementName(), dough);
+            	dough.setPrice(Double.parseDouble(operation.getPrice()));
+            	piadinaCS.updateDoughByType(operation.getType(), dough);
                 break;
             case "REMOVE":
-            	piadinaCS.deleteDoughByType(operation.getElementName());
+            	piadinaCS.deleteDoughByType(operation.getType());
                 break;
             default:
-                throw new IllegalArgumentException("Invalid operation type: " + operation.getType());
+                throw new IllegalArgumentException("Invalid operation type: " + operation.getOperationtype());
         }
     }
     
     private void handleMeatBaseOperation(Operation operation) throws Exception {
         MeatBase meatBase = new MeatBase();
-        meatBase.setType(operation.getElementName());
-        switch(operation.getType()) {
+        meatBase.setType(operation.getType());
+        meatBase.setDescription(operation.getDescription());
+        switch(operation.getOperationtype()) {
             case "ADD":
+            	meatBase.setPrice(Double.parseDouble(operation.getPrice()));
             	piadinaCS.addMeatBase(meatBase);
                 break;
             case "UPDATE":
-            	piadinaCS.updateMeatBaseByType(operation.getElementName(), meatBase);
+            	meatBase.setPrice(Double.parseDouble(operation.getPrice()));
+            	piadinaCS.updateMeatBaseByType(operation.getType(), meatBase);
                 break;
             case "REMOVE":
-            	piadinaCS.deleteMeatBaseByType(operation.getElementName());
+            	piadinaCS.deleteMeatBaseByType(operation.getType());
                 break;
             default:
-                throw new IllegalArgumentException("Invalid operation type: " + operation.getType());
+                throw new IllegalArgumentException("Invalid operation type: " + operation.getOperationtype());
         }
     }
     
     private void handleSaucesOperation(Operation operation) throws Exception {
         Sauces sauces = new Sauces();
-        sauces.setType(operation.getElementName());
-        switch(operation.getType()) {
+        sauces.setType(operation.getType());
+        sauces.setDescription(operation.getDescription());
+        switch(operation.getOperationtype()) {
             case "ADD":
+            	sauces.setPrice(Double.parseDouble(operation.getPrice()));
             	piadinaCS.addSauces(sauces);
                 break;
             case "UPDATE":
-            	piadinaCS.updateSaucesByType(operation.getElementName(), sauces);
+            	sauces.setPrice(Double.parseDouble(operation.getPrice()));
+            	piadinaCS.updateSaucesByType(operation.getType(), sauces);
                 break;
             case "REMOVE":
-            	piadinaCS.deleteSaucesByType(operation.getElementName());
+            	piadinaCS.deleteSaucesByType(operation.getType());
                 break;
             default:
-                throw new IllegalArgumentException("Invalid operation type: " + operation.getType());
+                throw new IllegalArgumentException("Invalid operation type: " + operation.getOperationtype());
         }
     }
     
     private void handleOptionalElementOperation(Operation operation) throws Exception {
         OptionalElements optionalElements = new OptionalElements();
-        optionalElements.setType(operation.getElementName());
-        switch(operation.getType()) {
+        optionalElements.setType(operation.getType());
+        optionalElements.setDescription(operation.getDescription());
+        switch(operation.getOperationtype()) {
             case "ADD":
+            	optionalElements.setPrice(Double.parseDouble(operation.getPrice()));
             	piadinaCS.addOptionalElements(optionalElements);
                 break;
             case "UPDATE":
-            	piadinaCS.updateOptionalElementsByType(operation.getElementName(), optionalElements);
+            	optionalElements.setPrice(Double.parseDouble(operation.getPrice()));
+            	piadinaCS.updateOptionalElementsByType(operation.getType(), optionalElements);
                 break;
             case "REMOVE":
-            	piadinaCS.deleteOptionalElementsByType(operation.getElementName());
+            	piadinaCS.deleteOptionalElementsByType(operation.getType());
                 break;
             default:
-                throw new IllegalArgumentException("Invalid operation type: " + operation.getType());
+                throw new IllegalArgumentException("Invalid operation type: " + operation.getOperationtype());
         }
     }
 }

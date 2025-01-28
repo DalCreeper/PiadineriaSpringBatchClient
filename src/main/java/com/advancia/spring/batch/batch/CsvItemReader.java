@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,8 @@ import com.opencsv.bean.CsvToBeanBuilder;
 @Component
 public class CsvItemReader implements ItemReader<Operation> {
     private Iterator<Operation> operationIterator;
+    
+    private static final Logger logger = LogManager.getLogger(CsvItemReader.class);
 
     @PostConstruct
     public void init() throws Exception {
@@ -34,6 +38,11 @@ public class CsvItemReader implements ItemReader<Operation> {
 
     @Override
     public Operation read() {
-        return operationIterator != null && operationIterator.hasNext() ? operationIterator.next() : null;
+    	if(operationIterator != null && operationIterator.hasNext()) {
+            Operation operation = operationIterator.next();
+            logger.info("Reading operation: {}", operation);
+            return operation;
+        }
+        return null;
     }
 }

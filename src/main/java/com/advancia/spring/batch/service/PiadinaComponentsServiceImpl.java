@@ -1,5 +1,7 @@
 package com.advancia.spring.batch.service;
 
+import org.springframework.stereotype.Service;
+
 import com.advancia.spring.batch.soapclient.Dough;
 import com.advancia.spring.batch.soapclient.MeatBase;
 import com.advancia.spring.batch.soapclient.OptionalElements;
@@ -7,6 +9,7 @@ import com.advancia.spring.batch.soapclient.PiadinaComponentsApiSoap;
 import com.advancia.spring.batch.soapclient.PiadinaComponentsApiSoapService;
 import com.advancia.spring.batch.soapclient.Sauces;
 
+@Service
 public class PiadinaComponentsServiceImpl implements PiadinaComponentsService {
 
 	@Override

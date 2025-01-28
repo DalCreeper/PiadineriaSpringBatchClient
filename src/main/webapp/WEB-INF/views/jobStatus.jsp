@@ -11,6 +11,6 @@
     <c:if test="${not empty error}">
         <p>Error: ${error}</p>
     </c:if>
-    <a href="${pageContext.request.contextPath}/batch/start">Back</a>
+    <a href="${pageContext.request.contextPath}/batch/startJob">Back</a>
 </body>
 </html>

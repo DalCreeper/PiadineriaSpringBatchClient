@@ -1,1 +1,8 @@
-ADD, Dough, Raisin, 2025/01/25T12:35:00
+ADD, Dough, Raisin, Description, 2.20, 2025-01-28T11:49:30
+ADD, MeatBase, Horse, Description, 1.50, 2025-01-28T11:49:30
+REMOVE, Dough, Raisin,,, 2025-01-28T11:49:30
+UPDATE, MeatBase, Horse, Modified, 1.50, 2025-01-28T11:49:30
+ADD, Sauces, Curry, Description, 0.50, 2025-01-28T11:49:30
+REMOVE, MeatBase, Horse,,, 2025-01-28T11:49:30
+REMOVE, Sauces, Curry,,, 2025-01-28T11:49:30
+ADD, Dough, Test, Test, 0.1, 2025-01-28T17:20:30
