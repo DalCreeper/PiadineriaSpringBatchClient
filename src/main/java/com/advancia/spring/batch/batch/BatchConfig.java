@@ -60,17 +60,6 @@ public class BatchConfig {
     }
     
     @Bean
-    public JobRepository jobRepository(DataSource dataSource, PlatformTransactionManager transactionManager) throws Exception {
-        JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
-        factory.setDataSource(dataSource);
-        factory.setTransactionManager(transactionManager);
-        factory.setDatabaseType("ORACLE");
-        factory.setTablePrefix("BATCH_");
-        factory.setIsolationLevelForCreate("ISOLATION_DEFAULT");
-        return factory.getObject();
-    }
-    
-    @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
@@ -96,25 +85,96 @@ public class BatchConfig {
             .saveState(false)
             .build();
     }
-
+    
     @Bean
-    public ItemProcessor<Operation, Operation> itemProcessor() {
+    public Step stepReading() {
+        return stepBuilderFactory.get("stepReading")
+            .<Operation, Operation>chunk(10)
+            .reader(csvItemReader(null))
+            .writer(operations -> logger.info("Reading completed, {} operations read", operations.size()))
+            .build();
+    }
+    
+    @Bean
+    public Step stepValidation() {
+        return stepBuilderFactory.get("stepValidation")
+            .<Operation, Operation>chunk(10)
+            .reader(csvItemReader(null))
+            .processor(validationProcessor())
+            .writer(validationWriter())
+            .build();
+    }
+    
+    @Bean
+    public ItemProcessor<Operation, Operation> validationProcessor() {
+        return operation -> {
+        	switch(operation.getOperationtype()) {
+	        	case "ADD":
+	        		if(Double.parseDouble(operation.getPrice()) < 0) {
+	                    logger.warn("Invalid operation: negative price {}", operation);
+	                    return null;
+	                }
+	                break;
+	            case "UPDATE":
+	            	if(Double.parseDouble(operation.getPrice()) < 0) {
+	                    logger.warn("Invalid operation: negative price {}", operation);
+	                    return null;
+	                }
+	                break;
+	            case "REMOVE":
+	                break;
+	            default:
+	                throw new IllegalArgumentException("Invalid operation type: " + operation.getOperationtype());
+        	}
+            return operation;
+        };
+    }
+    
+    @Bean
+    public ItemWriter<Operation> validationWriter() {
+        return operations -> {
+            for(Operation operation : operations) {
+                logger.info("Valid operation: {}", operation);
+            }
+        };
+    }
+    
+    @Bean
+    public Step stepProcessing() {
+        return stepBuilderFactory.get("stepProcessing")
+            .<Operation, Operation>chunk(10)
+            .reader(csvItemReader(null))
+            .processor(processingProcessor())
+            .writer(processingWriter())
+            .build();
+    }
+    
+    @Bean
+    public ItemProcessor<Operation, Operation> processingProcessor() {
         return operation -> {
             long delay = calculateDelay(operation.getTimestamp());
-
             if(delay > 0) {
                 ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
                 scheduler.schedule(() -> {
                     try {
-						executeOperation(operation);
-					} catch(Exception e) {
-						logger.error("Operation failed on execute: {}", e);
-					}
-                }, Math.max(calculateDelay(operation.getTimestamp()), 0), TimeUnit.MILLISECONDS);
+                        executeOperation(operation);
+                    } catch(Exception e) {
+                        logger.error("Error executing operation: {}", e);
+                    }
+                }, delay, TimeUnit.MILLISECONDS);
             } else {
                 executeOperation(operation);
             }
-            return null;
+            return operation;
+        };
+    }
+    
+    @Bean
+    public ItemWriter<Operation> processingWriter() {
+        return operations -> {
+            for(Operation operation : operations) {
+                logger.info("Operation executed: {}", operation);
+            }
         };
     }
     
@@ -128,30 +188,35 @@ public class BatchConfig {
     private void executeOperation(Operation operation) throws Exception {
         soapClient.executeOperation(operation);
     }
-
+    
     @Bean
-    public ItemWriter<Operation> itemWriter() {
-        return operations -> {
-            for(Operation operation : operations) {
-            	System.out.println("Operation already scheduled: " + operation);
-            }
-        };
-    }
-
-    @Bean
-    public Step step() {
-        return stepBuilderFactory.get("step")
-            .<Operation, Operation>chunk(10)
-            .reader(csvItemReader(null))
-            .processor(itemProcessor())
-            .writer(itemWriter())
+    public Step stepLogging() {
+        return stepBuilderFactory.get("stepLogging")
+            .tasklet((contribution, chunkContext) -> {
+                logger.info("Job completed successfully!");
+                return null;
+            })
             .build();
     }
-
+    
     @Bean
     public Job job() {
-        return jobBuilderFactory.get("job")
-            .start(step())
+        return jobBuilderFactory.get("multiStepJob")
+            .start(stepReading())
+            .next(stepValidation())
+            .next(stepProcessing())
+            .next(stepLogging())
             .build();
+    }
+    
+    @Bean
+    public JobRepository jobRepository(DataSource dataSource, PlatformTransactionManager transactionManager) throws Exception {
+        JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
+        factory.setDataSource(dataSource);
+        factory.setTransactionManager(transactionManager);
+        factory.setDatabaseType("ORACLE");
+        factory.setTablePrefix("BATCH_");
+        factory.setIsolationLevelForCreate("ISOLATION_DEFAULT");
+        return factory.getObject();
     }
 }
