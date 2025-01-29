@@ -38,9 +38,18 @@ public class BatchController {
             
             JobExecution execution = jobLauncher.run(job, parameters);
             
-            model.addAttribute("status", execution.getStatus());
+            model.addAttribute("jobName", job.getName());
+            model.addAttribute("startTime", execution.getStartTime());
+            model.addAttribute("endTime", execution.getEndTime() != null ? execution.getEndTime() : "In Progress");
             model.addAttribute("executionId", execution.getId());
-            model.addAttribute("exitStatus", execution.getExitStatus().getExitDescription());
+            model.addAttribute("status", execution.getStatus());
+            
+            String exitDescription = execution.getExitStatus().getExitDescription();
+            if(exitDescription == null || exitDescription.isEmpty()) {
+                exitDescription = execution.getExitStatus().getExitCode();
+            }
+            model.addAttribute("exitStatus", exitDescription);
+            model.addAttribute("stepsCompleted", execution.getStepExecutions());
         } catch(Exception e) {
             model.addAttribute("status", "FAILED");
             model.addAttribute("error", e.getMessage());
